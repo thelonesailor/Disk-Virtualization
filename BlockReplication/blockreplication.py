@@ -1,12 +1,12 @@
-from random import randint
-
+from random import randint, choice
+import string
 
 class Block:
     blockId = -1
     data = None
 
-    def __init__(self, blockId):
-        self.blockId = blockId
+    def __init__(self, blockid):
+        self.blockId = blockid
 
     def read(self):
         return self.data
@@ -20,10 +20,10 @@ class Block:
             return False
 
 
-m = 1000 # 0 to m-1 blocks are available in physical disk
+m = 1000  # 0 to m-1 blocks are available in physical disk
 PhysicalDisk = [Block(i) for i in range(m)]
 UnusedBlocks = [(m, (0, m-1))]
-
+errorBlocks = []
 
 def reduce():
     while True:
@@ -37,7 +37,7 @@ def reduce():
                 lj, (sj, ej) = UnusedBlocks[j]
                 if ei+1 == sj:
                     found = True
-                    if i<j:
+                    if i < j:
                         UnusedBlocks.pop(i)
                         UnusedBlocks.pop(j-1)
                     else:
@@ -53,7 +53,7 @@ def reduce():
     UnusedBlocks.sort(reverse=True)
 
 
-def allocateBlocks(numblocks):
+def allocateblocks(numblocks):
     blocks = [None]
     requiredblocks = numblocks
     n = len(UnusedBlocks)
@@ -68,6 +68,7 @@ def allocateBlocks(numblocks):
                 blocks.append(j)
             allocated.append((l, (s, e)))
             deletefromunused.append(i)
+            requiredblocks = 0
             break
         elif l > requiredblocks:
             for j in range(s, s+requiredblocks):
@@ -75,6 +76,7 @@ def allocateBlocks(numblocks):
             allocated.append((requiredblocks, (s, s+requiredblocks-1)))
             deletefromunused.append(i)
             UnusedBlocks.append((l-requiredblocks, (s+requiredblocks, e)))
+            requiredblocks = 0
             break
         elif l < requiredblocks:
             for j in range(s, e+1):
@@ -83,24 +85,29 @@ def allocateBlocks(numblocks):
             requiredblocks -= l
             deletefromunused.append(i)
 
+    if requiredblocks > 0:
+        print("Not enough space to allocate {} blocks".format(numblocks))
+        print("Instead allocating {} blocks".format(numblocks-requiredblocks))
+
     deletefromunused.sort()
     d = len(deletefromunused)
     for i in range(d):
         UnusedBlocks.pop(deletefromunused[i])
-        for j in range(i+1,d):
+        for j in range(i+1, d):
             deletefromunused[j] -= 1
 
     UnusedBlocks.sort(reverse=True)
     return blocks, allocated
 
-def allocateforErrorBlock():
+
+def allocateforerrorblock():
     n = len(UnusedBlocks)
     l, (s, e) = UnusedBlocks[n-1]
     if l == 1:
         UnusedBlocks.pop(n-1)
         return e
     elif 1 < l:
-        UnusedBlocks[n - 1] = (l-1,(s,e-1))
+        UnusedBlocks[n - 1] = (l-1, (s, e-1))
         return e
     else:
         print("Interval of length 0 in UnusedBlocks")
@@ -117,8 +124,17 @@ class Disk:
     def __init__(self, diskid, numblocks):
         self.diskId = diskid
         self.numBlocks = numblocks
-        self.blocks1, self.allocated1 = allocateBlocks(numblocks)
-        self.blocks2, self.allocated2 = allocateBlocks(numblocks)
+        self.blocks1, self.allocated1 = allocateblocks(numblocks)
+        self.blocks2, self.allocated2 = allocateblocks(numblocks)
+
+    def printallocation(self):
+        print("Disk {}: {}".format(self.diskId, self.allocated1))
+        if len(str(self.diskId)) == 1:
+            print("        {}".format(self.allocated2))
+        elif len(str(self.diskId)) == 2:
+            print("         {}".format(self.allocated2))
+        else:
+            print("          {}".format(self.allocated2))
 
     def readblock(self, blockid):
         if 0 < blockid <= self.numBlocks:
@@ -129,6 +145,7 @@ class Disk:
                 return PhysicalDisk[physicalblockid1].read()
             else:
                 print("Error in physical block {}".format(physicalblockid1))
+                errorBlocks.append(physicalblockid1)
 
                 for i in range(len(self.allocated1)):
                     l, (s, e) = self.allocated1[i]
@@ -137,14 +154,14 @@ class Disk:
                             break
                         else:
                             if s < physicalblockid1:
-                                self.allocated1.append((physicalblockid1-s,(s,physicalblockid1-1)))
+                                self.allocated1.append((physicalblockid1-s, (s, physicalblockid1-1)))
                             if physicalblockid1 < e:
-                                self.allocated1.append((e-physicalblockid1,(physicalblockid1+1,e)))
+                                self.allocated1.append((e-physicalblockid1, (physicalblockid1+1, e)))
                             self.allocated1.pop(i)
                             break
 
-                newphysicalblock = allocateforErrorBlock()
-                self.allocated1.append((1,(newphysicalblock,newphysicalblock)))
+                newphysicalblock = allocateforerrorblock()
+                self.allocated1.append((1, (newphysicalblock, newphysicalblock)))
 
                 physicalblockid2 = self.blocks2[blockid]
                 data = PhysicalDisk[physicalblockid2].read()
@@ -167,16 +184,26 @@ class Disk:
 disks = {}
 
 
-def createDisk(diskid, numblocks):
+def printmemory():
+    print("-------------------")
+    for _, disk in disks.items():
+        disk.printallocation()
+    print("Unused: {}".format(UnusedBlocks))
+    print("Errors: {}".format(errorBlocks))
+    print("-------------------")
+
+
+def createdisk(diskid, numblocks):
     if diskid in disks:
         print("Disk with diskId={} already exists".format(diskid))
         return False
     else:
         disks[diskid] = Disk(diskid, numblocks)
+        print("Created disk {}".format(diskid))
         return True
 
 
-def readDisk(diskid, blockid):
+def readdisk(diskid, blockid):
     if diskid not in disks:
         print("Disk with diskId={} does not exist".format(diskid))
         return False
@@ -184,7 +211,7 @@ def readDisk(diskid, blockid):
         return disks[diskid].readblock(blockid)
 
 
-def writeDisk(diskid, blockid, data):
+def writedisk(diskid, blockid, data):
     if diskid not in disks:
         print("Disk with diskId={} does not exist".format(diskid))
         return False
@@ -192,27 +219,95 @@ def writeDisk(diskid, blockid, data):
         return disks[diskid].writeblock(blockid, data)
 
 
-def deleteDisk(diskId):
-    if diskId not in disks:
-        print("Disk with diskId={} does not exist".format(diskId))
+def deletedisk(diskid):
+    if diskid not in disks:
+        print("Disk with diskId={} does not exist".format(diskid))
         return False
     else:
         global UnusedBlocks
-        UnusedBlocks += disks[diskId].allocated1
-        UnusedBlocks += disks[diskId].allocated2
+        UnusedBlocks += disks[diskid].allocated1
+        UnusedBlocks += disks[diskid].allocated2
         reduce()
-        del disks[diskId].diskId
-        del disks[diskId].blocks1
-        del disks[diskId].blocks2
-        del disks[diskId].allocated1
-        del disks[diskId].allocated2
-        del disks[diskId]
+        del disks[diskid].diskId
+        del disks[diskid].blocks1
+        del disks[diskid].blocks2
+        del disks[diskid].allocated1
+        del disks[diskid].allocated2
+        del disks[diskid]
+        print("Deleted disk {}".format(diskid))
         return True
 
 
-createDisk(1,100)
-print(UnusedBlocks)
-readDisk(1,5)
-print(UnusedBlocks)
-deleteDisk(1)
-print(UnusedBlocks)
+def deletealldisks():
+    global disks, UnusedBlocks, errorBlocks
+    disks = {}
+    UnusedBlocks = [(m, (0, m-1))]
+    errorBlocks = []
+
+
+def availableblocks():
+    availabl = 0
+    for a, (_, _) in UnusedBlocks:
+        availabl += a
+    return availabl
+
+
+createdisk(1, 200)
+printmemory()
+createdisk(2, 100)
+printmemory()
+createdisk(3, 200)
+printmemory()
+deletedisk(2)
+printmemory()
+deletedisk(1)
+printmemory()
+deletedisk(3)
+printmemory()
+createdisk(1, 200)
+printmemory()
+
+print("Doing random disk reads and writes-----------------------")
+diskId = 1
+disklength = 200
+errors = 0
+for i in range(disklength//4):
+    blockId = randint(1, disklength)
+    length = randint(1, 100)
+    # print("{}, {}, {}".format(i, blockId, length))
+    dataWritten = ''.join(choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(length))
+    success = writedisk(diskId, blockId, dataWritten)
+    if success:
+        dataRead = readdisk(diskId, blockId)
+        # print("{}\n{}\n".format(dataWritten, dataRead))
+        assert dataRead == dataWritten
+    else:
+        errors += 1
+        print("Writing to block {} failed data={}".format(blockId, dataWritten))
+
+print("Number of writing errors={}".format(errors))
+print(errorBlocks)
+printmemory()
+deletedisk(1)
+printmemory()
+
+
+print("Doing random disk creates and deletes-----------------------")
+curr = 1
+for i in range(50):
+    w = 0
+    available = availableblocks()
+    # print(available)
+    if available//2 < 50:
+        w = 1
+    else:
+        w = 2
+    if w == 1:
+        # print(list(disks.keys()))
+        diskid = choice(list(disks.keys()))
+        deletedisk(diskid)
+    else:
+        diskid = curr
+        curr += 1
+        createdisk(curr, randint(50, available//2))
+    printmemory()

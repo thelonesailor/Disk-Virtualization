@@ -2,8 +2,8 @@ class Block:
     blockId = -1
     data = "uninitialised"
 
-    def __init__(self, blockId):
-        self.blockId = blockId
+    def __init__(self, blockid):
+        self.blockId = blockid
 
     def read(self):
         return self.data
@@ -17,7 +17,7 @@ class Block:
             return False
 
 
-m = 1000 # 0 to m-1 blocks are available in physical disk
+m = 1000  # 0 to m-1 blocks are available in physical disk
 PhysicalDisk = [Block(i) for i in range(m)]
 UnusedBlocks = [(m, (0, m-1))]
 
@@ -34,7 +34,7 @@ def reduce():
                 lj, (sj, ej) = UnusedBlocks[j]
                 if ei+1 == sj:
                     found = True
-                    if i<j:
+                    if i < j:
                         UnusedBlocks.pop(i)
                         UnusedBlocks.pop(j-1)
                     else:
@@ -50,7 +50,7 @@ def reduce():
     UnusedBlocks.sort(reverse=True)
 
 
-def allocateBlocks(numblocks):
+def allocateblocks(numblocks):
     blocks = [None]
     requiredblocks = numblocks
     n = len(UnusedBlocks)
@@ -84,7 +84,7 @@ def allocateBlocks(numblocks):
     d = len(deletefromunused)
     for i in range(d):
         UnusedBlocks.pop(deletefromunused[i])
-        for j in range(i+1,d):
+        for j in range(i+1, d):
             deletefromunused[j] -= 1
 
     UnusedBlocks.sort(reverse=True)
@@ -103,7 +103,7 @@ class Disk:
         self.diskId = diskid
         self.numBlocks = numblocks
         self.c = 1
-        blocks, allocated = allocateBlocks(numblocks)
+        blocks, allocated = allocateblocks(numblocks)
         self.blocks.append(blocks)
         self.allocated.append(allocated)
         self.changed = [False]*(numblocks+1)
@@ -130,12 +130,12 @@ class Disk:
 
     def newcheckpoint(self):
         if self.c == 1:
-            blocks, allocated = allocateBlocks(self.numBlocks)
+            blocks, allocated = allocateblocks(self.numBlocks)
             self.c += 1
             self.blocks.append(blocks)
             self.allocated.append(allocated)
 
-            for i in range(1,self.numBlocks+1):
+            for i in range(1, self.numBlocks+1):
                 if self.changed[i]:
                     data = PhysicalDisk[self.blocks[0][i]].read()
                     PhysicalDisk[self.blocks[1][i]].write(data)
@@ -155,7 +155,7 @@ class Disk:
 
             # print(changes)
             k = 1
-            blocks, allocated = allocateBlocks(changes)
+            blocks, allocated = allocateblocks(changes)
             for i in range(1, self.numBlocks+1):
                 if self.changed[i]:
                     newblocks[i] = blocks[k]
@@ -166,6 +166,7 @@ class Disk:
             self.blocks.append(newblocks)
             self.allocated.append(allocated)
             self.c += 1
+            self.changed = [False]*(self.numBlocks+1)
             print(self.blocks)
             return self.c-2
 
@@ -180,15 +181,25 @@ class Disk:
             self.blocks.pop(i)
             self.allocated.pop(i)
         self.c = checkpointid + 1
-        self.changed = [False]*(self.numBlocks+1)
         reduce()
+
+        self.changed = [False]*(self.numBlocks+1)
+        blocks, allocated = allocateblocks(self.numBlocks)
+        self.blocks.append(blocks)
+        self.allocated.append(allocated)
+        for i in range(1, self.numBlocks + 1):
+            data = PhysicalDisk[self.blocks[self.c - 1][i]].read()
+            PhysicalDisk[blocks[i]].write(data)
+
+        self.c += 1
+        print(self.blocks)
         return True
 
 
 disks = {}
 
 
-def createDisk(diskid, numblocks):
+def createdisk(diskid, numblocks):
     if diskid in disks:
         print("Disk with diskId={} already exists".format(diskid))
         return False
@@ -198,7 +209,7 @@ def createDisk(diskid, numblocks):
         return True
 
 
-def checkpointDisk(diskid):
+def checkpointdisk(diskid):
     if diskid not in disks:
         print("Disk with diskId={} does not exist".format(diskid))
         return False
@@ -208,18 +219,18 @@ def checkpointDisk(diskid):
         return checkpointid
 
 
-def rollbackDisk(diskid, checkpointid):
+def rollbackdisk(diskid, checkpointid):
     if diskid not in disks:
         print("Disk with diskId={} does not exist".format(diskid))
         return False
     else:
         success = disks[diskid].rollback(checkpointid)
         if success:
-            print("Rolled back disk {} to checkpoint {}".format(diskid,checkpointid))
+            print("Rolled back disk {} to checkpoint {}".format(diskid, checkpointid))
         return success
 
 
-def readDisk(diskid, blockid):
+def readdisk(diskid, blockid):
     if diskid not in disks:
         print("Disk with diskId={} does not exist".format(diskid))
         return False
@@ -227,7 +238,7 @@ def readDisk(diskid, blockid):
         return disks[diskid].readblock(blockid)
 
 
-def writeDisk(diskid, blockid, data):
+def writedisk(diskid, blockid, data):
     if diskid not in disks:
         print("Disk with diskId={} does not exist".format(diskid))
         return False
@@ -235,49 +246,65 @@ def writeDisk(diskid, blockid, data):
         return disks[diskid].writeblock(blockid, data)
 
 
-def deleteDisk(diskId):
-    if diskId not in disks:
-        print("Disk with diskId={} does not exist".format(diskId))
+def deletedisk(diskid):
+    if diskid not in disks:
+        print("Disk with diskId={} does not exist".format(diskid))
         return False
     else:
         global UnusedBlocks
-        for i in range(disks[diskId].c):
-            UnusedBlocks += disks[diskId].allocated[i]
+        for i in range(disks[diskid].c):
+            UnusedBlocks += disks[diskid].allocated[i]
         reduce()
-        del disks[diskId].diskId
-        for i in range(disks[diskId].c):
-            del disks[diskId].blocks[i]
-            del disks[diskId].allocated[i]
-        del disks[diskId].c
-        del disks[diskId]
+        del disks[diskid].diskId
+        for i in range(disks[diskid].c):
+            del disks[diskid].blocks[i]
+            del disks[diskid].allocated[i]
+        del disks[diskid].c
+        del disks[diskid]
+        print("deleted disk {}".format(diskid))
         return True
 
 
-createDisk(1, 5)
-for i in range(1, 6):
-    writeDisk(1, i, i+2)
-s = ""
-for i in range(1, 6):
-    s += str(readDisk(1, i))+","
-print(s)
+def printdiskdata(diskid):
+    if diskid not in disks:
+        print("Disk with diskId={} does not exist".format(diskid))
+        return False
+    else:
+        nb = disks[diskid].numBlocks
+        data = ""
+        for i in range(1, nb):
+            data += str(readdisk(1, i)) + ","
+        data += str(readdisk(1, nb))
+        print(data)
 
-writeDisk(1, 2, 1729)
-writeDisk(1, 1, 17)
-s = ""
-for i in range(1, 6):
-    s += str(readDisk(1, i))+","
-print(s)
 
-a = checkpointDisk(1)
+createdisk(1, 5)
+for i in range(1, 6):
+    writedisk(1, i, i+2)
+printdiskdata(1)
+a = checkpointdisk(1)
+writedisk(1, 2, 8)
+printdiskdata(1)
+b = checkpointdisk(1)
+writedisk(1, 1, 9)
+printdiskdata(1)
+c = checkpointdisk(1)
+writedisk(1, 3, 10)
+printdiskdata(1)
+d = checkpointdisk(1)
 
-writeDisk(1, 3, 'lmao')
-s = ""
-for i in range(1, 6):
-    s += str(readDisk(1, i))+","
-print(s)
-b = checkpointDisk(1)
-rollbackDisk(1, a)
-s = ""
-for i in range(1, 6):
-    s += str(readDisk(1, i))+","
-print(s)
+rollbackdisk(1, d)
+printdiskdata(1)
+rollbackdisk(1, c)
+printdiskdata(1)
+
+writedisk(1, 4, 11)
+printdiskdata(1)
+e = checkpointdisk(1)
+
+rollbackdisk(1, e)
+printdiskdata(1)
+rollbackdisk(1, b)
+printdiskdata(1)
+rollbackdisk(1, a)
+printdiskdata(1)

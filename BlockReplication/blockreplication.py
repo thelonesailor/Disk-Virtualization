@@ -264,14 +264,14 @@ deletedisk(1)
 printmemory()
 deletedisk(3)
 printmemory()
-createdisk(1, 200)
+createdisk(1, 460)
 printmemory()
 
 print("Doing random disk reads and writes-----------------------")
 diskId = 1
-disklength = 200
+disklength = 460
 errors = 0
-for i in range(disklength//4):
+for i in range(disklength//2):
     blockId = randint(1, disklength)
     length = randint(1, 100)
     # print("{}, {}, {}".format(i, blockId, length))
@@ -292,9 +292,9 @@ deletedisk(1)
 printmemory()
 
 
-print("Doing random disk creates and deletes-----------------------")
+print("Doing random disk creates and deletes ---------------------------------")
 curr = 1
-for i in range(50):
+for i in range(10):
     w = 0
     available = availableblocks()
     # print(available)
@@ -309,5 +309,5 @@ for i in range(50):
     else:
         diskid = curr
         curr += 1
-        createdisk(curr, randint(50, available//2))
+        createdisk(diskid, randint(50, available//2))
     printmemory()

@@ -1,5 +1,6 @@
 from random import randint
 
+
 class Block:
     blockId = -1
     data = None
@@ -181,6 +182,14 @@ def readDisk(diskid, blockid):
         return False
     else:
         return disks[diskid].readblock(blockid)
+
+
+def writeDisk(diskid, blockid, data):
+    if diskid not in disks:
+        print("Disk with diskId={} does not exist".format(diskid))
+        return False
+    else:
+        return disks[diskid].writeblock(blockid, data)
 
 
 def deleteDisk(diskId):

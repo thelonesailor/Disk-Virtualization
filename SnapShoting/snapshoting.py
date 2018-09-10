@@ -1,16 +1,27 @@
+lenA = 600
+lenB = 400
+A = [None]*lenA
+B = [None]*lenB
+
+
 class Block:
     blockId = -1
-    data = "uninitialised"
 
     def __init__(self, blockid):
         self.blockId = blockid
 
     def read(self):
-        return self.data
+        if 0 <= self.blockId < lenA:
+            return A[self.blockId]
+        elif lenA <= self.blockId < lenA + lenB:
+            return B[self.blockId-lenA]
 
     def write(self, data):
         if len(str(data)) <= 100:
-            self.data = data
+            if 0 <= self.blockId < lenA:
+                A[self.blockId] = data
+            elif lenA <= self.blockId < lenA + lenB:
+                B[self.blockId - lenA] = data
             return True
         else:
             print("Writing excess data to block {}".format(self.blockId))

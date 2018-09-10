@@ -50,7 +50,8 @@ for i in range(1000):
     blockId = randint(1, 500)
     length = randint(1, 100)
     # print("{}, {}, {}".format(i, blockId, length))
-    dataWritten = ''.join(choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(length))
+    dataWritten = ''.join(choice(string.ascii_uppercase + string.ascii_lowercase + string.digits)
+                          for _ in range(length))
     success = writeblock(blockId, dataWritten)
     if success:
         dataRead = readblock(blockId)

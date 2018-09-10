@@ -1,29 +1,41 @@
 from random import randint, choice
 import string
 
+lenA = 600
+lenB = 400
+A = [None]*lenA
+B = [None]*lenB
+
+
 class Block:
     blockId = -1
-    data = None
 
     def __init__(self, blockid):
         self.blockId = blockid
 
     def read(self):
-        return self.data
+        if 0 <= self.blockId < lenA:
+            return A[self.blockId]
+        elif lenA <= self.blockId < lenA + lenB:
+            return B[self.blockId-lenA]
 
     def write(self, data):
         if len(str(data)) <= 100:
-            self.data = data
+            if 0 <= self.blockId < lenA:
+                A[self.blockId] = data
+            elif lenA <= self.blockId < lenA + lenB:
+                B[self.blockId - lenA] = data
             return True
         else:
             print("Writing excess data to block {}".format(self.blockId))
             return False
 
 
-m = 1000  # 0 to m-1 blocks are available in physical disk
+m = lenA + lenB  # 0 to m-1 blocks are available in physical disk
 PhysicalDisk = [Block(i) for i in range(m)]
 UnusedBlocks = [(m, (0, m-1))]
 errorBlocks = []
+
 
 def reduce():
     while True:
@@ -161,7 +173,25 @@ class Disk:
                             break
 
                 newphysicalblock = allocateforerrorblock()
-                self.allocated1.append((1, (newphysicalblock, newphysicalblock)))
+
+                found = False
+                delete = None
+                for i in range(len(self.allocated1)):
+                    l, (s, e) = self.allocated1[i]
+                    if s-1 == newphysicalblock:
+                        found = True
+                        self.allocated1.append((l+1, (s-1, e)))
+                        delete = i
+                        break
+                    elif newphysicalblock == e+1:
+                        found = True
+                        self.allocated1.append((l+1, (s, e+1)))
+                        delete = i
+                        break
+                if found:
+                    self.allocated1.pop(delete)
+                else:
+                    self.allocated1.append((1, (newphysicalblock, newphysicalblock)))
 
                 physicalblockid2 = self.blocks2[blockid]
                 data = PhysicalDisk[physicalblockid2].read()
@@ -264,14 +294,16 @@ deletedisk(1)
 printmemory()
 deletedisk(3)
 printmemory()
-createdisk(1, 460)
+createdisk(1, 220)
+printmemory()
+createdisk(2, 220)
 printmemory()
 
 print("Doing random disk reads and writes-----------------------")
-diskId = 1
-disklength = 460
+disklength = 220
 errors = 0
 for i in range(disklength//2):
+    diskId = randint(1, 2)
     blockId = randint(1, disklength)
     length = randint(1, 100)
     # print("{}, {}, {}".format(i, blockId, length))

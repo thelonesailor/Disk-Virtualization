@@ -1,27 +1,37 @@
 from random import randint, choice
 import string
 
+lenA = 600
+lenB = 400
+A = [None]*lenA
+B = [None]*lenB
+
 
 class Block:
     blockId = -1
-    data = None
 
     def __init__(self, blockid):
         self.blockId = blockid
 
     def read(self):
-        return self.data
+        if 0 <= self.blockId < lenA:
+            return A[self.blockId]
+        elif lenA <= self.blockId < lenA + lenB:
+            return B[self.blockId-lenA]
 
     def write(self, data):
         if len(str(data)) <= 100:
-            self.data = data
+            if 0 <= self.blockId < lenA:
+                A[self.blockId] = data
+            elif lenA <= self.blockId < lenA + lenB:
+                B[self.blockId - lenA] = data
             return True
         else:
             print("Writing excess data to block {}".format(self.blockId))
             return False
 
 
-m = 1000  # 0 to m-1 blocks are available in physical disk
+m = lenA + lenB  # 0 to m-1 blocks are available in physical disk
 PhysicalDisk = [Block(i) for i in range(m)]
 UnusedBlocks = [(m, (0, m-1))]
 

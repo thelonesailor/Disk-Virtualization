@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="57783e58-d1f5-4d41-9d1a-bf787a3a3669" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockReplication/blockreplication.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockReplication/blockreplication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConsolidationAndPartitioning/part1.py" beforeDir="false" afterPath="$PROJECT_DIR$/ConsolidationAndPartitioning/part1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConsolidationAndPartitioning/part2.py" beforeDir="false" afterPath="$PROJECT_DIR$/ConsolidationAndPartitioning/part2.py" afterDir="false" />
+    <list default="true" id="57783e58-d1f5-4d41-9d1a-bf787a3a3669" name="Default Changelist" comment="critical change &amp; merged replacement block, almost final">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SnapShoting/snapshoting.py" beforeDir="false" afterPath="$PROJECT_DIR$/SnapShoting/snapshoting.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,7 +15,7 @@
     <session id="376039830">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="8" />
+          <entry key="project.closed" value="9" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.28" value="2" />
@@ -30,8 +26,9 @@
           <entry key="project.open.time.53" value="1" />
           <entry key="project.open.time.55" value="1" />
           <entry key="project.open.time.6" value="1" />
+          <entry key="project.open.time.67" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -48,38 +45,39 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="8049" />
-          <entry key="txt" value="139" />
+          <entry key="py" value="8214" />
+          <entry key="txt" value="197" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="139" />
-          <entry key="Python" value="8049" />
+          <entry key="PLAIN_TEXT" value="197" />
+          <entry key="Python" value="8214" />
         </counts>
       </usages-collector>
+      <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SnapShoting/snapshoting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="142">
+              <caret line="304" column="16" lean-forward="true" selection-start-line="304" selection-start-column="16" selection-end-line="304" selection-end-column="16" />
               <folding>
-                <marker date="1536598978339" expanded="true" signature="3057:3227" ph="..." />
-                <marker date="1536598978339" expanded="true" signature="4443:5997" ph="..." />
-                <marker date="1536598978339" expanded="true" signature="9592:9910" ph="..." />
+                <marker date="1538643624212" expanded="true" signature="3057:3250" ph="..." />
+                <marker date="1538643624212" expanded="true" signature="4466:6154" ph="..." />
+                <marker date="1538643624212" expanded="true" signature="8917:9235" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BlockReplication/blockreplication.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
+            <state relative-caret-position="2655">
               <caret line="178" column="52" selection-start-line="178" selection-start-column="52" selection-end-line="178" selection-end-column="52" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -91,7 +89,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ConsolidationAndPartitioning/part2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
+            <state relative-caret-position="90">
               <caret line="7" selection-start-line="7" selection-end-line="7" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -107,7 +105,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ConsolidationAndPartitioning/part1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
+            <state relative-caret-position="750">
               <caret line="51" column="35" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="35" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -137,9 +135,9 @@
         <option value="$PROJECT_DIR$/ConsolidationAndPartitioning.py" />
         <option value="$PROJECT_DIR$/BlockReplication/part1.py" />
         <option value="$PROJECT_DIR$/ConsolidationAndPartitioning/part1.py" />
-        <option value="$PROJECT_DIR$/SnapShoting/snapshoting.py" />
         <option value="$PROJECT_DIR$/ConsolidationAndPartitioning/part2.py" />
         <option value="$PROJECT_DIR$/BlockReplication/blockreplication.py" />
+        <option value="$PROJECT_DIR$/SnapShoting/snapshoting.py" />
       </list>
     </option>
   </component>
@@ -212,7 +210,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.blockreplication">
+  <component name="RunManager" selected="Python.snapshoting">
     <configuration name="blockreplication" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Disk-Virtualization" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -305,8 +303,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.blockreplication" />
         <item itemvalue="Python.snapshoting" />
+        <item itemvalue="Python.blockreplication" />
         <item itemvalue="Python.part2" />
         <item itemvalue="Python.part1" />
       </list>
@@ -393,19 +391,32 @@
       <option name="project" value="LOCAL" />
       <updated>1536554915488</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="critical change &amp; merged replacement block">
+      <created>1536599849914</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1536599849915</updated>
+    </task>
+    <task id="LOCAL-00012" summary="critical change &amp; merged replacement block, almost final">
+      <created>1536600660332</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1536600660332</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-11" width="1313" height="780" extended-state="6" />
-    <editor active="true" />
+    <frame x="55" y="-4" width="1311" height="772" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33074534" />
+      <window_info anchor="bottom" id="Run" order="2" weight="1.0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39906833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -457,7 +468,9 @@
     <MESSAGE value="wrote tests for 3.3 &amp; removed warnings" />
     <MESSAGE value="made 3.3 fully correct &amp; printing changes" />
     <MESSAGE value="made 3.3 fully correct &amp; printing changes, looks done" />
-    <option name="LAST_COMMIT_MESSAGE" value="made 3.3 fully correct &amp; printing changes, looks done" />
+    <MESSAGE value="critical change &amp; merged replacement block" />
+    <MESSAGE value="critical change &amp; merged replacement block, almost final" />
+    <option name="LAST_COMMIT_MESSAGE" value="critical change &amp; merged replacement block, almost final" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ConsolidationAndPartitioning.py" />
@@ -470,10 +483,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ConsolidationAndPartitioning/part1.py">
+    <entry file="file://$PROJECT_DIR$/SnapShoting/snapshoting.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="51" column="35" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="35" />
+        <state relative-caret-position="142">
+          <caret line="304" column="16" lean-forward="true" selection-start-line="304" selection-start-column="16" selection-end-line="304" selection-end-column="16" />
+          <folding>
+            <marker date="1538643624212" expanded="true" signature="3057:3250" ph="..." />
+            <marker date="1538643624212" expanded="true" signature="4466:6154" ph="..." />
+            <marker date="1538643624212" expanded="true" signature="8917:9235" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BlockReplication/blockreplication.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2655">
+          <caret line="178" column="52" selection-start-line="178" selection-start-column="52" selection-end-line="178" selection-end-column="52" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -482,7 +507,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ConsolidationAndPartitioning/part2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="90">
           <caret line="7" selection-start-line="7" selection-end-line="7" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
@@ -494,22 +519,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SnapShoting/snapshoting.py">
+    <entry file="file://$PROJECT_DIR$/ConsolidationAndPartitioning/part1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <marker date="1536598978339" expanded="true" signature="3057:3227" ph="..." />
-            <marker date="1536598978339" expanded="true" signature="4443:5997" ph="..." />
-            <marker date="1536598978339" expanded="true" signature="9592:9910" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BlockReplication/blockreplication.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="178" column="52" selection-start-line="178" selection-start-column="52" selection-end-line="178" selection-end-column="52" />
+        <state relative-caret-position="750">
+          <caret line="51" column="35" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="35" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

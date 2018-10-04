@@ -114,6 +114,9 @@ def printblocks(lst, diskid):
     print(s)
 
 
+parent = {}
+last = -1
+
 class Disk:
     diskId = -1
     numBlocks = 0
@@ -164,15 +167,19 @@ class Disk:
                     PhysicalDisk[self.blocks[1][i]].write(data)
 
             self.changed = [False]*(self.numBlocks+1)
+            parent[0] = -1
+            global last
+            last = 0
             return 0
         else:
             changes = 0
             newblocks = [None]*(self.numBlocks+1)
             newallocated = []
+            parent[self.c-1] = last
             for i in range(1, self.numBlocks+1):
                 if not self.changed[i]:
                     newblocks[i] = self.blocks[self.c-1][i]
-                    self.blocks[self.c-1][i] = self.blocks[self.c-2][i]
+                    self.blocks[self.c-1][i] = self.blocks[last][i]
                     newallocated.append((1, (newblocks[i], newblocks[i])))
                 else:
                     changes += 1
@@ -189,6 +196,7 @@ class Disk:
             allocated += newallocated
             self.blocks.append(newblocks)
             self.allocated.append(allocated)
+            last = self.c - 1
             self.c += 1
             self.changed = [False]*(self.numBlocks+1)
             return self.c-2
@@ -198,34 +206,11 @@ class Disk:
             print("Invalid checkpointid")
             return False
 
-        global UnusedBlocks
-        for i in range(self.c-1, checkpointid+1, -1):
-            UnusedBlocks += self.allocated[i]
-            self.blocks.pop(i)
-            self.allocated.pop(i)
-        self.c = checkpointid + 2
-        reduce()
-
-        needtoallocate = 0
         for i in range(1, self.numBlocks + 1):
-            # print("{},{}".format(self.c,checkpointid))
-            if self.blocks[self.c-2][i] == self.blocks[self.c-1][i]:
-                needtoallocate += 1
-
-        self.changed = [False]*(self.numBlocks+1)
-        if needtoallocate > 0:
-            blocks, allocated = allocateblocks(needtoallocate)
-            self.allocated[self.c-1] += allocated
-
-        k = 1
-        for i in range(1, self.numBlocks + 1):
-            if self.blocks[self.c-2][i] == self.blocks[self.c-1][i]:
-                self.blocks[self.c-1][i] = blocks[k]
-                k += 1
-
-        for i in range(1, self.numBlocks + 1):
-            data = PhysicalDisk[self.blocks[self.c-2][i]].read()
+            data = PhysicalDisk[self.blocks[checkpointid][i]].read()
             PhysicalDisk[self.blocks[self.c-1][i]].write(data)
+        global last
+        last = checkpointid
         return True
 
 
@@ -335,6 +320,9 @@ writedisk(1, 4, 11)
 e = checkpointdisk(1)
 
 rollbackdisk(1, e)
-rollbackdisk(1, c)
 rollbackdisk(1, b)
+writedisk(1, 5, 12)
+d = checkpointdisk(1)
 rollbackdisk(1, a)
+rollbackdisk(1, c)
+rollbackdisk(1, d)
